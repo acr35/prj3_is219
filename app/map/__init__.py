@@ -3,40 +3,52 @@ import json
 import logging
 import os
 
-from flask import Blueprint, render_template, abort, url_for, current_app, jsonify
+from app.auth.decorators import admin_required
+from flask import Blueprint, render_template, abort, url_for, current_app, jsonify, redirect, flash
 from flask_login import current_user, login_required
 from jinja2 import TemplateNotFound
 
 from app.db import db
 from app.db.models import Location
-from app.songs.forms import csv_upload
+from app.map.forms import csv_upload
 from werkzeug.utils import secure_filename, redirect
 from flask import Response
+from app.map.forms import location_edit_form, register_form
+
 
 map = Blueprint('map', __name__,
                         template_folder='templates')
 
 @map.route('/locations', methods=['GET'], defaults={"page": 1})
-@map.route('/locations/<int:page>', methods=['GET'])
+@map.route('/locations/<int:page>', methods=['GET','POST'])
 def browse_locations(page):
     page = page
+    titles = [('title', 'Location'), ('longitude', 'Longitude'), ('latitude', 'Latitude'), ('population', 'Population')]
+    edit_url = ('map.edit_location', [('location_id', ':id')])
+    add_url = url_for('map.add_location')
+    delete_url = ('map.delete_location', [('location_id', ':id')])
     per_page = 10
     pagination = Location.query.paginate(page, per_page, error_out=False)
     data = pagination.items
-    try:
-        return render_template('browse_locations.html',data=data,pagination=pagination)
-    except TemplateNotFound:
-        abort(404)
-
-@map.route('/locations_datatables/', methods=['GET'])
-def browse_locations_datatables():
-
-    data = Location.query.all()
 
     try:
-        return render_template('browse_locations_datatables.html',data=data)
+        return render_template('browse_locations.html', titles=titles, add_url=add_url, edit_url=edit_url, delete_url=delete_url,
+                                   data=data, Location=Location, record_type="Location",pagination=pagination)
+            # return render_template('browse_locations.html',data=data,pagination=pagination)
     except TemplateNotFound:
-        abort(404)
+            abort(404)
+
+
+# @map.route('/locations_datatables/', methods=['GET'])
+# def browse_locations_datatables():
+#
+#     data = Location.query.all()
+#
+#     try:
+#         return render_template('browse_locations_datatables.html',data=data)
+#     except TemplateNotFound:
+#         abort(404)
+
 
 @map.route('/api/locations/', methods=['GET'])
 def api_locations():
@@ -82,20 +94,6 @@ def location_upload():
         return render_template('upload_locations.html', form=form)
     except TemplateNotFound:
         abort(404)
-
-@map.route('/locations')
-@login_required
-@admin_required
-def browse_locations():
-    current_app.logger.info('Info level log')
-    current_app.logger.warning('Warning level log')
-    data = Location.query.all()
-    titles = [('email', 'Email'), ('registered_on', 'Registered On')]
-    edit_url = ('map.edit_location', [('location_id', ':id')])
-    add_url = url_for('map.add_location')
-    delete_url = ('map.delete_location', [('location_id', ':id')])
-    return render_template('browse.html', titles=titles, add_url=add_url, edit_url=edit_url, delete_url=delete_url,
-                           data=data, Location=Location, record_type="Locations")
 
 
 @map.route('/locations/<int:location_id>')
