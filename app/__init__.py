@@ -15,7 +15,7 @@ from app.db import db
 from app.auth import auth
 from app.cli import create_database
 from app.map import map
-
+from flask_cors import CORS
 
 login_manager = flask_login.LoginManager()
 
@@ -44,6 +44,10 @@ def create_app():
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
     db.init_app(app)
+    api_v1_cors_config = {
+        "methods": ["OPTIONS", "GET", "POST"],
+    }
+    CORS(app, resources={"/api/*": api_v1_cors_config})
     # add command function to cli commands
     app.cli.add_command(create_database)
     # Setup Flask-User and specify the User data-model
