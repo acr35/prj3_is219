@@ -3,6 +3,8 @@ import json
 import logging
 import os
 
+from werkzeug.security import generate_password_hash
+
 from app.auth.decorators import admin_required
 from flask import Blueprint, render_template, abort, url_for, current_app, jsonify, redirect, flash
 from flask_login import current_user, login_required
