@@ -35,6 +35,7 @@
                     <div class="navbar-nav mr-auto">
                         {% if current_user.is_authenticated %}
                             {{ render_nav_item('auth.dashboard','Dashboard' ) }}
+                            {{ render_nav_item('map.browse_locations','Locations' ) }}
                         {% else %}
                             {{ render_nav_item('simple_pages.index', 'Home') }}
                         {% endif %}
@@ -56,11 +57,7 @@
                                 <li><a class="dropdown-item" href="{{ url_for("auth.edit_account") }}">Manage
                                     Account</a></li>
                                 {% if current_user.is_admin %}
-                                    <li><a class="dropdown-item" href="{{ url_for("auth.browse_users") }}">User Mgmt</a></li>
-                                    <li><a class="dropdown-item" href="{{ url_for("map.browse_locations") }}">Loc Mgmt</a></li>
-                                    <li><a class="dropdown-item" href="{{ url_for("map.browse_locations_datatables") }}">Loc Mgmt(dt)</a></li>
-
-
+                                    <li><a class="dropdown-item" href="{{ url_for("auth.browse_users") }}">User Management</a></li>
                                 {% endif %}
                                 <li><a class="dropdown-item" href="{{ url_for("auth.logout") }}">Logout</a></li>
                             </ul>
