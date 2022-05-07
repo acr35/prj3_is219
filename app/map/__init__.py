@@ -13,7 +13,7 @@ from app.db.models import Location
 from app.map.forms import csv_upload
 from werkzeug.utils import secure_filename, redirect
 from flask import Response
-from app.map.forms import location_edit_form, register_form
+from app.map.forms import location_edit_form, location_form
 
 
 map = Blueprint('map', __name__, template_folder='templates')
@@ -36,17 +36,6 @@ def browse_locations(page):
             # return render_template('browse_locations.html',data=data,pagination=pagination)
     except TemplateNotFound:
             abort(404)
-
-
-# @map.route('/locations_datatables/', methods=['GET'])
-# def browse_locations_datatables():
-#
-#     data = Location.query.all()
-#
-#     try:
-#         return render_template('browse_locations_datatables.html',data=data)
-#     except TemplateNotFound:
-#         abort(404)
 
 
 @map.route('/api/locations/', methods=['GET'])
@@ -99,7 +88,7 @@ def location_upload():
 @login_required
 def retrieve_location(location_id):
     location = Location.query.get(location_id)
-    return render_template('profile_view.html', location=location)
+    return render_template('location_view.html', location=location)
 
 
 @map.route('/locations/<int:location_id>/edit', methods=['POST', 'GET'])
@@ -108,11 +97,14 @@ def edit_location(location_id):
     location = Location.query.get(location_id)
     form = location_edit_form(obj=location)
     if form.validate_on_submit():
-        location.about = form.about.data
-        location.is_admin = int(form.is_admin.data)
+        location.title = form.title.data
+        location.longitude = form.longitude.data
+        location.latitude = form.latitude.data
+        location.population = form.population.data
         db.session.add(location)
         db.session.commit()
-        flash('Location Edited Successfully', 'success')
+        flash('User Edited Successfully', 'success')
+        current_app.logger.info("edited a location")
         return redirect(url_for('map.browse_locations'))
     return render_template('location_edit.html', form=form)
 
@@ -120,7 +112,7 @@ def edit_location(location_id):
 @map.route('/locations/new', methods=['POST', 'GET'])
 @login_required
 def add_location():
-    form = register_form()
+    form = location_form()
     if form.validate_on_submit():
         location = Location.query.filter_by(email=form.email.data).first()
         if location is None:
@@ -137,11 +129,8 @@ def add_location():
 
 @map.route('/locations/<int:location_id>/delete', methods=['POST'])
 @login_required
-def delete_locations(location_id):
+def delete_location(location_id):
     location = Location.query.get(location_id)
-    if location.id == current_location.id:
-        flash("You can't delete yourself!")
-        return redirect(url_for('map.browse_locations'), 302)
     db.session.delete(location)
     db.session.commit()
     flash('Location Deleted', 'success')

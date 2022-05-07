@@ -7,9 +7,42 @@ class csv_upload(FlaskForm):
   submit = SubmitField()
 
 class location_edit_form(FlaskForm):
-    about = TextAreaField('About', [validators.length(min=6, max=300)],
-                          description="Please add information about yourself")
-    is_admin = BooleanField('Admin', render_kw={'value': '1'})
+    title = StringField('Location Name', [
+        validators.DataRequired(),
+
+    ], description="Name of the location")
+    longitude = StringField('Longitude', [
+        validators.DataRequired(),
+
+    ], description="Longitude of the location")
+    latitude = StringField('Latitude', [
+        validators.DataRequired(),
+
+    ], description="Latitude of the location")
+    population = IntegerField('Population', [
+        validators.DataRequired(),
+
+    ], description="Population of the location")
+    is_admin = BooleanField('Admin', render_kw={'value':'1'})
+    submit = SubmitField()
+
+class location_form(FlaskForm):
+    title = StringField('Location Name', [
+        validators.DataRequired(),
+
+    ], description="Name of the location")
+    longitude = StringField('Longitude', [
+        validators.DataRequired(),
+
+    ], description="Longitude of the location")
+    latitude = StringField('Latitude', [
+        validators.DataRequired(),
+
+    ], description="Latitude of the location")
+    population = IntegerField('Population', [
+        validators.DataRequired(),
+
+    ], description="Population of the location")
     submit = SubmitField()
 
 
