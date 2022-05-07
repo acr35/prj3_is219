@@ -16,8 +16,7 @@ from flask import Response
 from app.map.forms import location_edit_form, register_form
 
 
-map = Blueprint('map', __name__,
-                        template_folder='templates')
+map = Blueprint('map', __name__, template_folder='templates')
 
 @map.route('/locations', methods=['GET'], defaults={"page": 1})
 @map.route('/locations/<int:page>', methods=['GET','POST'])
