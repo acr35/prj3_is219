@@ -2,7 +2,7 @@
 
 [![Production Workflow](https://github.com/acr35/prj3_is219/actions/workflows/prod.yml/badge.svg)](https://github.com/acr35/prj3_is219/actions/workflows/prod.yml)
 
-* [Production Deployment](https://kwilliam-prod.herokuapp.com/)
+* [Production Deployment](https://prj3-prod.herokuapp.com/)
 
 
 [![Development Workflow](https://github.com/acr35/prj3_is219/actions/workflows/dev.yml/badge.svg)](https://github.com/acr35/prj3_is219/actions/workflows/dev.yml)
