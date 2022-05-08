@@ -7,17 +7,17 @@ from app.db import db
 from flask_login import UserMixin
 from sqlalchemy_serializer import SerializerMixin
 
-# class Song(db.Model,SerializerMixin):
-#     __tablename__ = 'songs'
-#     id = db.Column(db.Integer, primary_key=True)
-#     title = db.Column(db.String(300), nullable=True, unique=False)
-#     artist = db.Column(db.String(300), nullable=True, unique=False)
-#     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-#     user = relationship("User", back_populates="songs", uselist=False)
-#
-#     def __init__(self, title, artist):
-#         self.title = title
-#         self.artist = artist
+class Song(db.Model,SerializerMixin):
+    __tablename__ = 'songs'
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(300), nullable=True, unique=False)
+    artist = db.Column(db.String(300), nullable=True, unique=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user = relationship("User", back_populates="songs", uselist=False)
+
+    def __init__(self, title, artist):
+        self.title = title
+        self.artist = artist
 
 class Location(db.Model, SerializerMixin):
     __tablename__ = 'locations'
@@ -56,7 +56,7 @@ class User(UserMixin, db.Model):
     registered_on = db.Column('registered_on', db.DateTime)
     active = db.Column('is_active', db.Boolean(), nullable=False, server_default='1')
     is_admin = db.Column('is_admin', db.Boolean(), nullable=False, server_default='0')
-    # songs = db.relationship("Song", back_populates="user", cascade="all, delete")
+    songs = db.relationship("Song", back_populates="user", cascade="all, delete")
     locations = db.relationship("Location", back_populates="user", cascade="all, delete")
 
     # `roles` and `groups` are reserved words that *must* be defined
