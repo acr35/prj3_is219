@@ -36,6 +36,9 @@
                         {% if current_user.is_authenticated %}
                             {{ render_nav_item('auth.dashboard','Dashboard' ) }}
                             {{ render_nav_item('map.browse_locations','Locations' ) }}
+                            {{ render_nav_item('songs.songs_browse','My Songs' ) }}
+                            {{ render_nav_item('songs.songs_upload','Upload Songs' ) }}
+
                         {% else %}
                             {{ render_nav_item('simple_pages.index', 'Home') }}
                         {% endif %}
