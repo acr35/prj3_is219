@@ -4,11 +4,70 @@
 
     <div class="row">
 
-         <div class="col-7 mx-auto">
+         <div class="col-7">
              <h2>Register</h2>
              {{ render_form(form) }}
          </div>
+
+        <div id="message" class="col-5" style="display:none">
+            <div class="progress">
+                <div style="width: 0%" id="progressBar" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+            <p id="letter" class="invalid">A lowercase letter</p>
+            <p id="capital" class="invalid">An uppercase letter</p>
+            <p id="number" class="invalid">A number</p>
+        </div>
     </div>
 
+    <script>
+        var myInput = document.getElementById("password");
+        var progress_bar = document.getElementById("progressBar");
+        var letter = document.getElementById("letter");
+        var capital = document.getElementById("capital");
+        var number = document.getElementById("number");
+        var hasLower = false;
+        var hasCapital = false;
+        var hasNumber = false;
+        myInput.onfocus = function() {
+          document.getElementById("message").style.display = "block";
+        }
+        myInput.onblur = function() {
+          document.getElementById("message").style.display = "none";
+        }
 
+
+        myInput.onkeyup = function() {
+            let lowerCaseLetters = /[a-z]/g;
+            if(myInput.value.match(lowerCaseLetters)) {
+                hasLower = true;
+            } else {
+                hasLower = false;
+            }
+
+
+            let upperCaseLetters = /[A-Z]/g;
+            if(myInput.value.match(upperCaseLetters)) {
+                hasCapital = true;
+            } else {
+                hasCapital = false;
+            }
+
+
+            let numbers = /[0-9]/g;
+            if(myInput.value.match(numbers)) {
+                hasNumber = true;
+            } else {
+                hasNumber = false;
+            }
+
+            var counter = 0;
+            if (hasLower) counter++;
+            if (hasCapital) counter++;
+            if (hasNumber) counter++;
+
+            if(counter == 3) progress_bar.style.width = "100%";
+            else progress_bar.style.width = (counter * 33) + "%";
+
+        }
+    </script>
 {% endblock %}
