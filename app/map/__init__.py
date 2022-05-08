@@ -117,15 +117,15 @@ def edit_location(location_id):
 def add_location():
     form = location_form()
     if form.validate_on_submit():
-        location = Location.query.filter_by(email=form.email.data).first()
+        location = Location.query.filter_by(title=form.title.data).first()
         if location is None:
-            location = Location(email=form.email.data, password=generate_password_hash(form.password.data))
+            location = Location(title=form.title.data,population=form.population.data,longitude=form.longitude.data,latitude=form.latitude.data)
             db.session.add(location)
             db.session.commit()
             flash('Congratulations, you just created a location', 'success')
             return redirect(url_for('map.browse_locations'))
         else:
-            flash('Already Registered')
+            flash('Locations already EXIST')
             return redirect(url_for('map.browse_locations'))
     return render_template('location_new.html', form=form)
 
