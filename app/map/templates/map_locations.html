@@ -28,7 +28,7 @@
                 let xmlHttpReq = new XMLHttpRequest();
                 xmlHttpReq.open("GET", "/api/locations", true);
                 xmlHttpReq.send(null);
-                locations = JSON.parse(xmlHttpReq.responseText);
+                const locations = JSON.parse(xmlHttpReq.responseText);
                 const myLatLng = {lat: parseFloat(locations["data"][0].lat), lng: parseFloat(locations["data"][0].long)};
 
                  map = new google.maps.Map(document.getElementById("map"), {
