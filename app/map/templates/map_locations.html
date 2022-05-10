@@ -26,15 +26,19 @@
             function initMap() {
 
                 let xmlHttpReq = new XMLHttpRequest();
-                xmlHttpReq.open("GET", "/api/locations", true);
+                xmlHttpReq.open("GET", "/api/locations", false);
                 xmlHttpReq.send(null);
-                const locations = JSON.parse(xmlHttpReq.responseText);
-                const myLatLng = {lat: parseFloat(locations["data"][0].lat), lng: parseFloat(locations["data"][0].long)};
+                locations = JSON.parse(xmlHttpReq.responseText);
+                const myLatLng = {
+                    lat: parseFloat(locations["data"][0].lat),
+                    lng: parseFloat(locations["data"][0].long)
+                };
 
                  map = new google.maps.Map(document.getElementById("map"), {
                     center: myLatLng,
                     zoom: 5,
                 });
+
                 locations.data.forEach((item, index) => {
                     const cord = {lat: parseFloat(item.lat), lng: parseFloat(item.long)};
                     new google.maps.Marker({
